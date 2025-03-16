@@ -9,7 +9,7 @@ export default function Home() {
     /* Page container 100 dvh (100% of the dynamic view height) */
     <div className="flex h-dvh flex-col text-lg text-neutral-900">
       {/* Header */}
-      <div className="h-16 shrink-0 bg-red-200 p-2">
+      <div className="h-16 shrink-0 bg-red-100 p-2">
         Header (should always be visible)
       </div>
 
