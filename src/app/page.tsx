@@ -25,12 +25,12 @@ declare global {
 
 const contentArray = Array.from(Array(0).keys());
 
-const useVirtualKeybaordBounds = () => {
+const useVirtualKeyboardBounds = () => {
   const [bounds, setBounds] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
   useLayoutEffect(() => {
     if ('virtualKeyboard' in navigator) {
-      console.log('useVirtualKeybaord: has VirtualKeyboard API');
+      console.log('useVirtualKeyboardBounds: has VirtualKeyboard API');
 
       navigator.virtualKeyboard.overlaysContent = true;
 
@@ -42,19 +42,19 @@ const useVirtualKeybaordBounds = () => {
       navigator.virtualKeyboard.addEventListener("geometrychange", getGeometryChange);
 
       return () => {
-        console.log('useVirtualKeybaord: cleanup');
+        console.log('useVirtualKeyboardBounds: cleanup');
         navigator.virtualKeyboard.overlaysContent = false;
         navigator.virtualKeyboard.removeEventListener("geometrychange", getGeometryChange);
       };
     }
-    console.log('useVirtualKeybaord: no VirtualKeyboard API');
+    console.log('useVirtualKeyboardBounds: no VirtualKeyboard API');
   }, []);
 
   return bounds;
 };
 
 export default function Home() {
-  const keyboardBounds = useVirtualKeybaordBounds();
+  const keyboardBounds = useVirtualKeyboardBounds();
 
   console.log('keyboardBounds 1:', { keyboardBounds })
 
@@ -66,7 +66,7 @@ export default function Home() {
         Header (should always be visible)
       </div>
 
-      {/* Scrollable content */}
+      {/* Scrollable content (takes available height) */}
       <div className="overflow-y-auto bg-blue-100 p-2 flex-grow">
         {contentArray.map((item) => (
           <p className="py-4" key={item}>
