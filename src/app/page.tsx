@@ -1,7 +1,62 @@
+'use client'
+
+import React, { useLayoutEffect, useState } from 'react';
+
+declare global {
+  interface VirtualKeyboardGeometryChangeEvent {
+    target: {
+      boundingRect: {
+        x: number,
+        y: number,
+        width: number,
+        height: number,
+      }
+    }
+  }
+
+  interface Navigator {
+    virtualKeyboard: {
+      overlaysContent: boolean
+      addEventListener: (eventType: string, fn: (event: VirtualKeyboardGeometryChangeEvent) => void) => void
+      removeEventListener: (eventType: string, fn: (event: VirtualKeyboardGeometryChangeEvent) => void) => void
+    }
+  }
+}
+
 const contentArray = Array.from(Array(50).keys());
 
-export default function Home() {
-  console.log('Home');
+const useVirtualKeybaordBounds = () => {
+  const [bounds, setBounds] = useState({ x: 0, y: 0, width: 0, height: 0 });
+
+  useLayoutEffect(() => {
+    if ("virtualKeyboard" in navigator) {
+      console.log('useVirtualKeybaord: has VirtualKeyboard API');
+
+      navigator.virtualKeyboard.overlaysContent = true;
+
+      const getGeometryChange = (event: VirtualKeyboardGeometryChangeEvent) => {
+        const { x, y, width, height } = event.target.boundingRect;
+        setBounds({ x, y, width, height});
+      }
+      
+      navigator.virtualKeyboard.addEventListener("geometrychange", getGeometryChange);
+
+      return () => {
+        console.log('useVirtualKeybaord: cleanup');
+        navigator.virtualKeyboard.overlaysContent = false;
+        navigator.virtualKeyboard.removeEventListener("geometrychange", getGeometryChange);
+      };
+    }
+    console.log('useVirtualKeybaord: no VirtualKeyboard API');
+  }, []);
+
+  return bounds;
+};
+
+export default function keyboardBounds() {
+  const keyboardBounds = useVirtualKeybaordBounds();
+
+  console.log('keyboardBounds:', { keyboardBounds })
 
   return (
     /* Page container 100 dvh (100% of the dynamic view height) */
