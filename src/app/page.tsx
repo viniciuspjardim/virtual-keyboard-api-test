@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useLayoutEffect, useState, useRef } from 'react';
 
 declare global {
   interface VirtualKeyboardGeometryChangeEvent {
@@ -25,7 +25,7 @@ declare global {
 
 const contentArray = Array.from(Array(50).keys());
 
-const useVirtualKeybaordBounds = () => {
+const useVirtualKeybaordBounds = (keyboardPlaceholderRef?: React.RefObject<HTMLDivElement | null>) => {
   const [bounds, setBounds] = useState({ x: 0, y: 0, width: 0, height: 0 });
 
   useLayoutEffect(() => {
@@ -37,6 +37,10 @@ const useVirtualKeybaordBounds = () => {
       const getGeometryChange = (event: VirtualKeyboardGeometryChangeEvent) => {
         const { x, y, width, height } = event.target.boundingRect;
         setBounds({ x, y, width, height});
+
+        if (keyboardPlaceholderRef?.current) {
+          keyboardPlaceholderRef.current.style.height = `${height}px`
+        }
       }
       
       navigator.virtualKeyboard.addEventListener("geometrychange", getGeometryChange);
@@ -54,7 +58,8 @@ const useVirtualKeybaordBounds = () => {
 };
 
 export default function keyboardBounds() {
-  const keyboardBounds = useVirtualKeybaordBounds();
+  const keyboardPlaceholderRef = useRef<HTMLDivElement>(null);
+  const keyboardBounds = useVirtualKeybaordBounds(keyboardPlaceholderRef);
 
   console.log('keyboardBounds:', { keyboardBounds })
 
@@ -79,6 +84,7 @@ export default function keyboardBounds() {
       <div className="bg-green-100 p-2 shrink-0">
         <div>Footer (It should always be visible)</div>
         <textarea className="border border-neutral-800 w-full" />
+        <div ref={keyboardPlaceholderRef} />
       </div>
     </div>
   );
