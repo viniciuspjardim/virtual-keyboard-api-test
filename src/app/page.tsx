@@ -23,7 +23,7 @@ declare global {
   }
 }
 
-const contentArray = Array.from(Array(0).keys());
+const contentArray = Array.from(Array(50).keys());
 
 const useVirtualKeyboardBounds = () => {
   const [bounds, setBounds] = useState({ x: 0, y: 0, width: 0, height: 0 });
@@ -54,22 +54,22 @@ const useVirtualKeyboardBounds = () => {
 };
 
 export default function Home() {
-  const keyboardBounds = useVirtualKeyboardBounds();
+  const bounds = useVirtualKeyboardBounds();
 
-  console.log('keyboardBounds 1:', { keyboardBounds })
+  console.log('Home - keyboardBounds:', { bounds })
 
   return (
     /* Page container 100 dvh (100% of the dynamic view height) */
-    <div className="h-dvh flex flex-col text-neutral-900">
+    <div className="h-dvh flex flex-col text-neutral-900 text-lg">
       {/* Header */}
-      <div className="bg-red-200 h-20 p-2 shrink-0">
+      <div className="bg-red-200 h-16 p-2 shrink-0">
         Header (should always be visible)
       </div>
 
       {/* Scrollable content (takes available height) */}
       <div className="overflow-y-auto bg-blue-100 p-2 flex-grow">
         {contentArray.map((item) => (
-          <p className="py-4" key={item}>
+          <p className="py-2" key={item}>
             Scrollable content {item}
           </p>
         ))}
@@ -78,11 +78,11 @@ export default function Home() {
       {/* Footer */}
       <div className="bg-green-100 p-2 shrink-0">
         <div>Footer (should always be visible)</div>
-        <textarea className="border border-neutral-800 w-full" />
+        <textarea className="border bg-white border-neutral-800 w-full px-2 py-1" />
       </div>
 
       {/* Keyboard placeholder, it will grow to take virtual keyboard space when it appears */}
-      <div className="bg-purple-500 shrink-0" style={{ height: `${keyboardBounds.height}px` }} />
+      <div className="bg-purple-500 shrink-0" style={{ height: `${bounds.height}px` }} />
     </div>
   );
 }
