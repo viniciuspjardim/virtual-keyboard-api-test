@@ -6,7 +6,7 @@ export default function Home() {
   console.log('Home');
 
   return (
-    /* Page container 100 dvh (100% of the dynamic view height) */
+    /* Page container 100dvh (100% of the dynamic viewport height) */
     <div className="flex h-dvh flex-col text-lg text-neutral-900">
       {/* Header */}
       <div className="h-16 shrink-0 bg-red-100 p-2">
