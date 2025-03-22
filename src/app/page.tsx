@@ -1,9 +1,27 @@
 'use client';
 
+import { useEffect } from 'react';
+
 const contentArray = Array.from(Array(50).keys());
 
 export default function Home() {
   console.log('Home');
+
+  useEffect(() => {
+    if ('virtualKeyboard' in navigator) {
+      console.log('has VirtualKeyboard API');
+
+      // Make the virtual keyboard overlay the content
+      navigator.virtualKeyboard.overlaysContent = true;
+
+      return () => {
+        console.log('cleanup');
+        // Reset the virtual keyboard overlay setting
+        navigator.virtualKeyboard.overlaysContent = false;
+      };
+    }
+    console.log('no VirtualKeyboard API');
+  }, []);
 
   return (
     /* Page container 100dvh (100% of the dynamic viewport height) */
